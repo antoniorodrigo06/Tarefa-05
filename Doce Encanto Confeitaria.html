@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doce Encanto - Alta Confeitaria</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- CSS Incorporado (Conforme as diretrizes acadêmicas: Variáveis, Cores, Tipografia, Margens e Menu CSS) -->
+    <style>
+        :root {
+            --brand-bg: #FAF6F0;
+            --brand-cardBg: #FFFFFF;
+            --brand-primary: #3D231D;
+            --brand-primaryHover: #2B1810;
+            --brand-accent: #C87D55;
+            --brand-border: #F3EBE1;
+            --brand-subtext: #6B5E57;
+            --brand-lightBg: #FDFBF7;
+
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--brand-bg);
+            color: var(--brand-primary);
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .font-playfair {
+            font-family: var(--font-serif);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--brand-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9C8B9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-accent);
+        }
+
+        /* Controle do menu responsivo mobile via CSS (Padrão StackOverflow / Checkbox Hack) */
+        #menu-toggle {
+            display: none;
+        }
+
+        .mobile-nav-links {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--brand-border);
+            margin-top: 0.75rem;
+        }
+
+        .btn-close-menu {
+            display: none;
+        }
+
+        .btn-open-menu {
+            display: flex;
+        }
+
+        #menu-toggle:checked ~ .mobile-nav-links {
+            display: flex;
+        }
+
+        #menu-toggle:checked ~ div .btn-open-menu,
+        header:has(#menu-toggle:checked) .btn-open-menu {
+            display: none;
+        }
+
+        #menu-toggle:checked ~ div .btn-close-menu,
+        header:has(#menu-toggle:checked) .btn-close-menu {
+            display: flex;
+        }
+
+        @media (min-width: 768px) {
+            .btn-open-menu, .btn-close-menu, .mobile-nav-links {
+                display: none !important;
+            }
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: 'var(--brand-bg)',
+                            cardBg: 'var(--brand-cardBg)',
+                            primary: 'var(--brand-primary)',
+                            primaryHover: 'var(--brand-primaryHover)',
+                            accent: 'var(--brand-accent)',
+                            border: 'var(--brand-border)',
+                            subtext: 'var(--brand-subtext)',
+                            lightBg: 'var(--brand-lightBg)'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['var(--font-serif)'],
+                        sans: ['var(--font-sans)']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-accent selection:text-white">
+    <!-- Header Navbar -->
+    <header class="sticky top-0 z-40 bg-brand-bg/95 backdrop-blur-md border-b border-brand-border px-4 lg:px-16 py-3 transition-all">
+        <!-- Checkbox oculto para alternar o menu mobile puramente via CSS -->
+        <input type="checkbox" id="menu-toggle">
+
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo Section -->
+            <a href="#" onclick="switchTab('inicio'); return false;" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-brand-primary/20 flex items-center justify-center bg-white shadow-sm">
+                    <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v2m-6 4h12m-10 0v8a2 2 0 002 2h8a2 2 0 002-2v-8M6 10l1-4h10l1 4M9 14h6" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-playfair font-bold text-base sm:text-lg leading-tight tracking-tight text-brand-primary">Doce Encanto</h1>
+                    <p class="text-[9px] sm:text-[10px] tracking-widest text-brand-subtext font-semibold uppercase">Alta Confeitaria</p>
+                </div>
+            </a>
+
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-subtext">
+                <button onclick="switchTab('inicio')" id="nav-inicio" class="hover:text-brand-primary transition-colors py-1 border-b-2 border-brand-primary text-brand-primary">Início</button>
+                <button onclick="switchTab('produtos')" id="nav-produtos" class="hover:text-brand-primary transition-colors py-1 border-b-2 border-transparent">Produtos</button>
+                <button onclick="switchTab('cadastro')" id="nav-cadastro" class="hover:text-brand-primary transition-colors py-1 border-b-2 border-transparent">Cadastro</button>
+                <button onclick="switchTab('contato')" id="nav-contato" class="hover:text-brand-primary transition-colors py-1 border-b-2 border-transparent">Contato</button>
+                <button onclick="switchTab('autor')" id="nav-autor" class="hover:text-brand-primary transition-colors py-1 border-b-2 border-transparent">Autor</button>
+            </nav>
+
+            <!-- Actions Right -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleCartModal()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-brand-border bg-white text-brand-primary text-xs font-semibold shadow-sm hover:border-brand-primary transition-all">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span>Sacola (<span id="cart-count">2</span>)</span>
+                </button>
+                
+                <!-- Botão Abrir Menu Mobile -->
+                <label for="menu-toggle" class="btn-open-menu md:hidden p-2 text-brand-primary focus:outline-none cursor-pointer">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </label>
+
+                <!-- Botão Fechar Menu Mobile -->
+                <label for="menu-toggle" class="btn-close-menu md:hidden p-2 text-brand-primary focus:outline-none cursor-pointer">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </label>
+            </div>
+        </div>
+
+        <!-- Mobile Menu dropdown -->
+        <div class="mobile-nav-links md:hidden text-sm">
+            <button onclick="switchTab('inicio')" class="text-left px-3 py-2 rounded-lg text-brand-primary font-medium bg-brand-border/40">Início</button>
+            <button onclick="switchTab('produtos')" class="text-left px-3 py-2 rounded-lg text-brand-subtext hover:bg-brand-border/20">Produtos</button>
+            <button onclick="switchTab('cadastro')" class="text-left px-3 py-2 rounded-lg text-brand-subtext hover:bg-brand-border/20">Cadastro</button>
+            <button onclick="switchTab('contato')" class="text-left px-3 py-2 rounded-lg text-brand-subtext hover:bg-brand-border/20">Contato</button>
+            <button onclick="switchTab('autor')" class="text-left px-3 py-2 rounded-lg text-brand-subtext hover:bg-brand-border/20">Autor</button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- SECTION: INÍCIO -->
+        <div id="view-inicio" class="view-panel transition-opacity duration-300">
+            <section class="max-w-7xl mx-auto px-4 lg:px-16 py-8 lg:py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                    <div class="space-y-5 text-center lg:text-left">
+                        <h2 class="font-playfair text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-primary leading-[1.15]">
+                            Doce Encanto Confeitaria
+                        </h2>
+                        <p class="text-brand-subtext text-sm sm:text-base leading-relaxed font-light">
+                            Criamos verdadeiras obras de arte comestíveis. Nossa alta confeitaria artesanal une a precisão das técnicas francesas ao calor do sabor brasileiro.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                            <button onclick="switchTab('produtos')" class="w-full sm:w-auto px-7 py-3 rounded-full bg-brand-primary hover:bg-brand-primaryHover text-white text-sm font-medium shadow-md transition-all">
+                                Ver Cardápio
+                            </button>
+                            <button onclick="openEspacoModal()" class="w-full sm:w-auto px-7 py-3 rounded-full bg-white border border-brand-border hover:border-brand-primary text-brand-primary text-sm font-medium shadow-sm transition-all">
+                                Nosso Espaço
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-xl border border-brand-border bg-white">
+                            <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&q=80&w=1000" 
+                                 alt="Bolo Decorado Especial" 
+                                 class="w-full h-[280px] sm:h-[420px] object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-7xl mx-auto px-4 lg:px-16 py-12">
+                <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+                    <h3 class="font-playfair text-2xl sm:text-3xl font-bold text-brand-primary">Nossas Especialidades</h3>
+                    <p class="text-brand-subtext text-xs sm:text-sm font-light">
+                        Uma seleção refinada de bolos, tortas e doces finos criados para surpreender os paladares mais exigentes.
+                    </p>
+                </div>
+                <div id="featured-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dinâmico via JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- SECTION: PRODUTOS -->
+        <div id="view-produtos" class="view-panel hidden max-w-7xl mx-auto px-4 lg:px-16 py-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h2 class="font-playfair text-2xl sm:text-3xl font-bold text-brand-primary">Nosso Cardápio</h2>
+                    <p class="text-brand-subtext text-xs sm:text-sm mt-1">Explore toda a nossa variedade de criações doces</p>
+                </div>
+                <div class="relative w-full md:w-auto">
+                    <input type="text" id="search-input" oninput="renderCatalog()" placeholder="Buscar doce..." 
+                           class="w-full md:w-64 pl-10 pr-4 py-2.5 rounded-full border border-brand-border text-xs sm:text-sm focus:outline-none focus:border-brand-primary bg-white">
+                    <i data-lucide="search" class="w-4 h-4 text-brand-subtext absolute left-3.5 top-3"></i>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 text-xs font-medium">
+                <button onclick="filterCategory('todos')" class="cat-btn active px-4 py-2 rounded-full border border-brand-primary bg-brand-primary text-white whitespace-nowrap">Todos</button>
+                <button onclick="filterCategory('tortas')" class="cat-btn px-4 py-2 rounded-full border border-brand-border bg-white text-brand-subtext whitespace-nowrap">Tortas</button>
+                <button onclick="filterCategory('bolos')" class="cat-btn px-4 py-2 rounded-full border border-brand-border bg-white text-brand-subtext whitespace-nowrap">Bolos</button>
+                <button onclick="filterCategory('doces')" class="cat-btn px-4 py-2 rounded-full border border-brand-border bg-white text-brand-subtext whitespace-nowrap">Doces Finos</button>
+                <button onclick="filterCategory('cupcakes')" class="cat-btn px-4 py-2 rounded-full border border-brand-border bg-white text-brand-subtext whitespace-nowrap">Cupcakes</button>
+            </div>
+
+            <div id="full-catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dinâmico via JS -->
+            </div>
+        </div>
+
+        <!-- SECTION: CADASTRO -->
+        <div id="view-cadastro" class="view-panel hidden max-w-7xl mx-auto px-4 lg:px-16 py-8">
+            <div class="mb-6">
+                <h2 class="font-playfair text-2xl sm:text-3xl font-bold text-brand-primary">Painel de Gestão</h2>
+                <p class="text-brand-subtext text-xs sm:text-sm">Adicione novos doces ao catálogo ou gerencie existentes.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5 bg-white p-5 sm:p-6 rounded-2xl border border-brand-border shadow-sm h-fit">
+                    <h3 id="form-title" class="font-playfair text-lg font-bold text-brand-primary mb-4 border-b border-brand-border pb-2">Registrar Novo Produto</h3>
+                    <form id="product-form" onsubmit="handleSaveProduct(event)" class="space-y-3">
+                        <input type="hidden" id="prod-id">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Nome</label>
+                            <input type="text" id="prod-title" required placeholder="Ex: Torta Holandesa" class="w-full px-3.5 py-2 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Categoria</label>
+                                <select id="prod-category" class="w-full px-3.5 py-2 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                                    <option value="tortas">Tortas</option>
+                                    <option value="bolos">Bolos</option>
+                                    <option value="doces">Doces Finos</option>
+                                    <option value="cupcakes">Cupcakes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Preço (R$)</label>
+                                <input type="number" step="0.01" id="prod-price" required placeholder="89.90" class="w-full px-3.5 py-2 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">URL Imagem</label>
+                            <input type="url" id="prod-image" required placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Descrição</label>
+                            <textarea id="prod-desc" rows="2" required placeholder="Detalhes..." class="w-full px-3.5 py-2 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg"></textarea>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button type="submit" class="flex-1 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-semibold">Salvar</button>
+                            <button type="button" onclick="resetForm()" class="px-3.5 py-2.5 rounded-xl border border-brand-border text-brand-subtext text-xs">Limpar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="lg:col-span-7 bg-white p-5 sm:p-6 rounded-2xl border border-brand-border shadow-sm overflow-hidden">
+                    <h3 class="font-playfair text-lg font-bold text-brand-primary mb-4 border-b border-brand-border pb-2">Produtos Cadastrados</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs sm:text-sm text-brand-subtext min-w-[400px]">
+                            <thead class="bg-brand-lightBg text-brand-primary font-semibold">
+                                <tr>
+                                    <th class="py-2.5 px-3 rounded-l-lg">Item</th>
+                                    <th class="py-2.5 px-3">Categoria</th>
+                                    <th class="py-2.5 px-3">Preço</th>
+                                    <th class="py-2.5 px-3 rounded-r-lg text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-products-table" class="divide-y divide-brand-border">
+                                <!-- Dinâmico via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: CONTATO -->
+        <div id="view-contato" class="view-panel hidden max-w-7xl mx-auto px-4 lg:px-16 py-8">
+            <div class="max-w-xl mx-auto bg-white p-6 sm:p-10 rounded-3xl border border-brand-border shadow-sm">
+                <div class="text-center mb-6">
+                    <h2 class="font-playfair text-2xl sm:text-3xl font-bold text-brand-primary">Contato</h2>
+                    <p class="text-brand-subtext text-xs sm:text-sm mt-1">Faremos sua ocasião inesquecível</p>
+                </div>
+                <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Nome</label>
+                            <input type="text" required placeholder="Maria Silva" class="w-full px-3.5 py-2.5 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">E-mail</label>
+                            <input type="email" required placeholder="maria@exemplo.com" class="w-full px-3.5 py-2.5 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Assunto</label>
+                        <input type="text" required placeholder="Encomenda de Casamento" class="w-full px-3.5 py-2.5 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-brand-primary uppercase mb-1">Mensagem</label>
+                        <textarea rows="3" required placeholder="Detalhes do pedido..." class="w-full px-3.5 py-2.5 rounded-xl border border-brand-border text-xs sm:text-sm bg-brand-lightBg"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-brand-primary text-white text-xs font-semibold">Enviar Mensagem</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SECTION: AUTOR -->
+        <div id="view-autor" class="view-panel hidden max-w-7xl mx-auto px-4 lg:px-16 py-8">
+            <div class="max-w-xl mx-auto bg-white p-6 sm:p-10 rounded-3xl border border-brand-border shadow-sm text-center">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-brand-lightBg flex items-center justify-center border border-brand-border">
+                    <i data-lucide="user" class="w-10 h-10 text-brand-accent"></i>
+                </div>
+                <h2 class="font-playfair text-2xl font-bold text-brand-primary mb-1">Antonio Rodrigo Lopes da Silva</h2>
+                <p class="text-brand-accent text-xs font-medium mb-4">Desenvolvedor & Criador</p>
+                <p class="text-brand-subtext text-xs sm:text-sm leading-relaxed">
+                    Site desenvolvido com dedicação e cuidado, unindo design elegante e funcionalidade moderna para apresentar com excelência os produtos da Doce Encanto.
+                </p>
+                <div class="mt-6 pt-4 border-t border-brand-border">
+                    <p class="text-[11px] text-brand-subtext">© 2026 — Todos os direitos reservados</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-brand-primary text-white mt-16 border-t border-brand-primaryHover">
+        <div class="max-w-7xl mx-auto px-4 lg:px-16 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-center md:justify-start gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+                            <i data-lucide="cake" class="w-4 h-4 text-brand-accent"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-playfair font-bold text-base leading-tight">Doce Encanto</h4>
+                            <p class="text-[8px] tracking-widest text-brand-accent uppercase">Alta Confeitaria</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-white/70 max-w-xs mx-auto md:mx-0">
+                        Produção artesanal diária com insumos selecionados de altíssima qualidade.
+                    </p>
+                </div>
+                <div class="space-y-2 text-xs text-white/80">
+                    <h5 class="font-semibold text-sm text-white mb-2">Atendimento</h5>
+                    <p><strong class="text-white">Terça a Sábado:</strong> 09h às 19h</p>
+                    <p><strong class="text-white">Domingo:</strong> 09h às 14h</p>
+                    <p class="pt-1 text-white/60">Tianguá - Ceará, Brasil</p>
+                </div>
+                <div class="space-y-3 text-xs text-white/80 flex flex-col items-center md:items-start">
+                    <h5 class="font-semibold text-sm text-white mb-1">Redes Sociais</h5>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"><i data-lucide="phone" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL PRODUCT -->
+    <div id="modal-product" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative">
+            <button onclick="closeProductModal()" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-brand-primary shadow">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="grid grid-cols-1">
+                <img id="modal-img" src="" alt="Produto" class="w-full h-48 sm:h-56 object-cover">
+                <div class="p-5 sm:p-6 space-y-4">
+                    <div>
+                        <span id="modal-cat" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-bg text-brand-accent"></span>
+                        <h3 id="modal-title" class="font-playfair text-xl font-bold text-brand-primary mt-1"></h3>
+                        <p id="modal-desc" class="text-xs text-brand-subtext mt-2 leading-relaxed"></p>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-brand-border">
+                        <span id="modal-price" class="font-bold text-lg text-brand-accent"></span>
+                        <button id="modal-add-btn" class="px-5 py-2.5 rounded-full bg-brand-primary text-white text-xs font-semibold">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CART -->
+    <div id="modal-cart" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center sm:justify-end">
+        <div class="bg-white h-[85vh] sm:h-full w-full max-w-md p-5 sm:p-6 flex flex-col justify-between shadow-2xl rounded-t-3xl sm:rounded-none">
+            <div>
+                <div class="flex items-center justify-between pb-3 border-b border-brand-border">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-primary"></i>
+                        <h3 class="font-playfair text-lg font-bold text-brand-primary">Sua Sacola</h3>
+                    </div>
+                    <button onclick="toggleCartModal()" class="p-1.5 text-brand-subtext"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div id="cart-items-container" class="divide-y divide-brand-border my-3 max-h-[50vh] overflow-y-auto pr-1">
+                    <!-- Dinâmico -->
+                </div>
+            </div>
+            <div class="border-t border-brand-border pt-3 space-y-3">
+                <div class="flex items-center justify-between text-xs sm:text-sm">
+                    <span class="text-brand-subtext">Total</span>
+                    <span id="cart-total" class="font-bold text-base text-brand-primary">R$ 0,00</span>
+                </div>
+                <button onclick="checkoutCart()" class="w-full py-3 rounded-full bg-brand-primary text-white text-xs font-semibold">Finalizar via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let initialProducts = [
+            { id: 1, title: "Torta de Frutas Vermelhas", category: "tortas", desc: "Massa sablée crocante, creme de baunilha Bourbon e seleção fresca de morangos, amoras e mirtilos.", price: 140.00, image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&q=80&w=800" },
+            { id: 2, title: "Bolo de Chocolate Belga", category: "bolos", desc: "Camadas macias de pão de ló de chocolate 54% cacau com recheio cremoso e cobertura espelhada.", price: 89.90, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=800" },
+            { id: 3, title: "Mil-Folhas Clássico", category: "doces", desc: "Massa folhada artesanal extremamente crocante intercalada com creme pâtissière de fava de baunilha.", price: 22.00, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800" },
+            { id: 4, title: "Macaron de Pistache", category: "doces", desc: "Tradicional biscoito de amêndoas francês com recheio cremoso de pistache siciliano puro.", price: 9.00, image: "https://images.unsplash.com/photo-1569864358642-9d1684040f43?auto=format&fit=crop&q=80&w=800" },
+            { id: 5, title: "Cupcake Red Velvet", category: "cupcakes", desc: "Massa aveludada com toque de cacau e cobertura suave de cream cheese frosting salpicada com raspas.", price: 14.00, image: "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&q=80&w=800" },
+            { id: 6, title: "Eclair de Caramelo", category: "doces", desc: "Massa choux recheada com creme leve e cobertura de caramelo salgado.", price: 18.00, image: "https://images.unsplash.com/photo-1621236378699-8599fac6e1d7?auto=format&fit=crop&q=80&w=800" }
+        ];
+
+        let cart = [{ ...initialProducts[0], qty: 1 }, { ...initialProducts[2], qty: 1 }];
+        let activeCategory = 'todos';
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.add('hidden'));
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Fecha o menu mobile automaticamente ao trocar de aba
+            const checkbox = document.getElementById('menu-toggle');
+            if(checkbox) checkbox.checked = false;
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('modal-cart');
+            modal.classList.toggle('hidden');
+            renderCart();
+        }
+
+        function renderFeatured() {
+            const grid = document.getElementById('featured-products-grid');
+            if(!grid) return;
+            grid.innerHTML = initialProducts.slice(0, 3).map(p => `
+                <div class="bg-white rounded-2xl border border-brand-border overflow-hidden shadow-sm flex flex-col justify-between">
+                    <img src="${p.image}" alt="${p.title}" class="w-full h-48 object-cover">
+                    <div class="p-4 space-y-2">
+                        <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-bg text-brand-accent">${p.category}</span>
+                        <h4 class="font-playfair font-bold text-base text-brand-primary">${p.title}</h4>
+                        <p class="text-xs text-brand-subtext line-clamp-2">${p.desc}</p>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="font-bold text-sm text-brand-accent">R$ ${p.price.toFixed(2)}</span>
+                            <button onclick="addToCart(${p.id})" class="px-3 py-1.5 rounded-full bg-brand-primary text-white text-xs">Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('full-catalog-grid');
+            const search = document.getElementById('search-input').value.toLowerCase();
+            if(!grid) return;
+            
+            const filtered = initialProducts.filter(p => {
+                const matchCat = activeCategory === 'todos' || p.category === activeCategory;
+                const matchSearch = p.title.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
+                return matchCat && matchSearch;
+            });
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-white rounded-2xl border border-brand-border overflow-hidden shadow-sm flex flex-col justify-between">
+                    <img src="${p.image}" alt="${p.title}" class="w-full h-48 object-cover">
+                    <div class="p-4 space-y-2">
+                        <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-bg text-brand-accent">${p.category}</span>
+                        <h4 class="font-playfair font-bold text-base text-brand-primary">${p.title}</h4>
+                        <p class="text-xs text-brand-subtext line-clamp-2">${p.desc}</p>
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="font-bold text-sm text-brand-accent">R$ ${p.price.toFixed(2)}</span>
+                            <button onclick="addToCart(${p.id})" class="px-3 py-1.5 rounded-full bg-brand-primary text-white text-xs">Comprar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-primary', 'text-white');
+                btn.classList.add('bg-white', 'text-brand-subtext');
+            });
+            event.target.classList.remove('bg-white', 'text-brand-subtext');
+            event.target.classList.add('bg-brand-primary', 'text-white');
+            renderCatalog();
+        }
+
+        function addToCart(id) {
+            const prod = initialProducts.find(p => p.id === id);
+            const existing = cart.find(item => item.id === id);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...prod, qty: 1 });
+            }
+            document.getElementById('cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+            alert('Produto adicionado à sacola!');
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total');
+            container.innerHTML = cart.map(item => `
+                <div class="py-3 flex items-center justify-between text-xs">
+                    <div>
+                        <p class="font-bold text-brand-primary">${item.title}</p>
+                        <p class="text-brand-subtext">Qtd: ${item.qty} x R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                    <span class="font-bold text-brand-accent">R$ ${(item.price * item.qty).toFixed(2)}</span>
+                </div>
+            `).join('');
+            const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            totalEl.innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        function checkoutCart() {
+            alert('Redirecionando para o WhatsApp...');
+        }
+
+        function handleSaveProduct(e) {
+            e.preventDefault();
+            alert('Produto salvo com sucesso!');
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            alert('Mensagem enviada com sucesso!');
+        }
+
+        function resetForm() {
+            document.getElementById('product-form').reset();
+        }
+
+        function openEspacoModal() {
+            alert('Conheça nossa loja matriz em Tianguá - CE!');
+        }
+
+        window.onload = () => {
+            renderFeatured();
+            renderCatalog();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
